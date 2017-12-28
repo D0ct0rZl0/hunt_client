@@ -1,7 +1,7 @@
 package Graph;
 
+import Entities.Player;
 import net.slashie.libjcsi.wswing.WSwingConsoleInterface;
-import net.slashie.libjcsi.ConsoleSystemInterface;
 import net.slashie.libjcsi.CSIColor;
 import java.util.Properties;
 
@@ -10,7 +10,7 @@ public class DrawingExample{
         Properties text = new Properties();
         text.setProperty("fontSize","20");
         text.setProperty("font", "Courier");
-        ConsoleSystemInterface csi = null;
+        WSwingConsoleInterface csi = null;
         try{
             csi = new WSwingConsoleInterface("Game map example", text);
         }
@@ -19,19 +19,12 @@ public class DrawingExample{
             eiie.printStackTrace();
             System.exit(-1);
         }
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
-                csi.print(i,j, "Ы", CSIColor.AMBER);
-            }
-        }
-        csi.print(0, 22, "Ваше поле", CSIColor.AMBER);
-        for (int i = 30; i < 50; i++) {
-            for (int j = 0; j < 20; j++) {
-                csi.print(i,j, "A", CSIColor.AMBER);
-            }
-        }
-        csi.print(30, 22, "Поле противника", CSIColor.AMBER);
-        csi.print(60, 0, "Область инструкций", CSIColor.AMBER);
-        csi.refresh();
+
+
+        csi.print(0, 0, "Your window", CSIColor.ALIZARIN);
+        csi.print(20, 0, "Enemy window", CSIColor.ALIZARIN);
+
+        Drawing.drawMap(new Player(0), csi, true);
+        Drawing.drawMap(new Player(1), csi, false);
     }
 }

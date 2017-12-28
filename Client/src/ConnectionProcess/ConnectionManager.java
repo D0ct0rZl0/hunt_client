@@ -7,15 +7,15 @@ import java.util.HashMap;
  * Created by DoctorZlo on 26.12.2017.
  */
 public class ConnectionManager {
-    private static Socket socket;
+    private Socket socket;
 
-    static void getConnection(HashMap<String, String> connData) throws Exception{
+    void getConnection(HashMap<String, String> connData) throws Exception{
         String ip = connData.get("ip");
         int port = Integer.parseInt(connData.get("port"));
         socket = new Socket(ip, port);
     }
 
-    public static Socket getSocket() {
+    public Socket getSocket() {
         return socket;
     }
 }

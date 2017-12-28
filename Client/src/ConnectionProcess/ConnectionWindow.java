@@ -4,6 +4,7 @@ package ConnectionProcess; /**
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.regex.*;
 import java.awt.*;
@@ -12,10 +13,11 @@ import java.awt.event.MouseEvent;
 
 
 public class ConnectionWindow {
-    private static HashMap<String, String> connectionInfo = null;
-    private static JFrame mainFrame;
+    private  HashMap<String, String> connectionInfo = null;
+    private  JFrame mainFrame;
+    private  Socket socket = null;
 
-    public static void getConnectionWindow() {
+    public void getConnectionWindow() {
         mainFrame = new JFrame("Connection window");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(600, 400);
@@ -24,17 +26,23 @@ public class ConnectionWindow {
         mainFrame.setVisible(true);
     }
 
+    public Socket getSocket() {
+        return socket;
+    }
+
     //SERVICE
-    private static void connect() {
+    private void connect() {
         try {
-            ConnectionManager.getConnection(connectionInfo);
+            ConnectionManager manager = new ConnectionManager();
+            manager.getConnection(connectionInfo);
+            socket = manager.getSocket();
         } catch (Exception e) {
             e.printStackTrace();
             getErrorMessage();
         }
     }
 
-    private static void getErrorMessage() {
+    private void getErrorMessage() {
         JFrame frame = new JFrame("Error");
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setSize(300, 200);
@@ -62,7 +70,7 @@ public class ConnectionWindow {
         frame.setVisible(true);
     }
 
-    private static JTextField getIpFild() {
+    private JTextField getIpFild() {
         JTextField ipField = new JTextField();
         ipField.setFont(new Font("Serif", Font.PLAIN, 24));
         ipField.setBackground(Color.RED);
@@ -82,7 +90,7 @@ public class ConnectionWindow {
         return ipField;
     }
 
-    private static JPanel getFrameContent() {
+    private JPanel getFrameContent() {
         JPanel boardPanel = new JPanel();
         boardPanel.setBackground(Color.lightGray);
         boardPanel.setLayout(new GridLayout(3, 1, 10, 10));
@@ -116,7 +124,7 @@ public class ConnectionWindow {
         return boardPanel;
     }
 
-    private static JTextField getPortFild() {
+    private JTextField getPortFild() {
         JTextField portField = new JTextField();
         portField.setFont(new Font("Serif", Font.PLAIN, 24));
         portField.setBackground(Color.RED);
@@ -136,7 +144,7 @@ public class ConnectionWindow {
         return portField;
     }
 
-    private static void setConnectionInfo(String ip, String port) {
+    private void setConnectionInfo(String ip, String port) {
         HashMap<String, String> conn = new HashMap<>();
         conn.put("ip", ip);
         conn.put("port", port);

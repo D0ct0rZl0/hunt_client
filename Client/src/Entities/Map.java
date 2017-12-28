@@ -7,13 +7,22 @@ import java.util.ArrayList;
  */
 public class Map {
     private String[][] map;
+    private int height;
+    private int weight;
+
     public Map() {
-        map = new String[5][5];
-        fillMap(5, 5);
+        map = new String[15][15];
+        height = 15;
+        weight = 15;
+
+        fillMap(15, 15);
     }
 
     public Map(int cols, int rows) {
         map = new String[cols][rows];
+        height = cols;
+        weight = rows;
+
         fillMap(cols, rows);
     }
 
@@ -31,6 +40,14 @@ public class Map {
 
     public String getByCoords(int col, int row) {
         return map[col][row];
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWeight() {
+        return weight;
     }
 
     public String[][] getMatryx() {

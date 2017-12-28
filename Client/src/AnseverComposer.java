@@ -18,12 +18,12 @@ public class AnseverComposer {
         answer += "move" + " " + direction + " ";
     }
 
-    public static void addThrow(String direction) {
-        answer += "throw" + " " + direction + " ";
+    public static void addBlow(String direction) {
+        answer += "blow" + " " + direction + " ";
     }
 
     public static String getAnswer() {
-        String reply = answer;
+        String reply = answer + "\n";
         answer = "";
         return answer;
     }
