@@ -3,6 +3,8 @@ package Graph;
 import Entities.Player;
 import net.slashie.libjcsi.wswing.WSwingConsoleInterface;
 import net.slashie.libjcsi.CSIColor;
+
+import java.awt.*;
 import java.util.Properties;
 
 public class DrawingExample{
@@ -11,6 +13,7 @@ public class DrawingExample{
         text.setProperty("fontSize","20");
         text.setProperty("font", "Courier");
         WSwingConsoleInterface csi = null;
+
         try{
             csi = new WSwingConsoleInterface("Game map example", text);
         }

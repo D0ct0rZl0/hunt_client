@@ -11,19 +11,19 @@ public class AnseverComposer {
     }
 
     public static void addLook(String direction) {
-        answer += "look" + " " + direction + " ";
+        answer += " ( look" + " " + direction + " ) ";
     }
 
     public static void addMove(String direction) {
-        answer += "move" + " " + direction + " ";
+        answer += " ( move" + " " + direction + " ) ";
     }
 
     public static void addBlow(String direction) {
-        answer += "blow" + " " + direction + " ";
+        answer += " ( blow" + " " + direction + " ) ";
     }
 
     public static String getAnswer() {
-        String reply = answer + "\n";
+        String reply = answer;
         answer = "";
         return answer;
     }

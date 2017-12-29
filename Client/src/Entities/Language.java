@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class Language {
     private static String[] language = new String[] {
       "up", "down", "left", "right",
-            "move", "look", "blow", "greeting", "options", "win", "lose", "rules"
+            "move", "look", "blow", "win", "lose"
     };
 
     public static String[] getLanguage() {

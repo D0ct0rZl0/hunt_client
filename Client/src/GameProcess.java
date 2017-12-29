@@ -1,17 +1,13 @@
-import ConnectionProcess.ConnectionWindow;
 import Entities.Language;
 import Entities.Player;
+import Graph.GamePanel;
 
-import Graph.Drawing;
-import net.slashie.libjcsi.wswing.WSwingConsoleInterface;
-import net.slashie.libjcsi.CSIColor;
-
-import java.util.Properties;
-
+import javax.swing.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Random;
 
 
 /**
@@ -19,64 +15,58 @@ import java.util.Random;
  */
 public class GameProcess {
     private  Socket socket;
-    private  BufferedReader input;
-    private  Writer output;
+    private  BufferedReader in;
+    private  Writer out;
     private  ArrayList<Player> players = new ArrayList<>();
     private  int selfId;
     private  int currentPlayer = 0;
     private  int selectedEnemyId;
     private  Interpreter interpreter;
     private  boolean gameState = true;
-    private volatile WSwingConsoleInterface frame;
+    private  volatile GamePanel panel;
 
     public GameProcess() {
         this.interpreter = new Interpreter(this);
     }
 
-    public  void startGame() throws IOException {
-        ConnectionWindow window = new ConnectionWindow();
-        window.getConnectionWindow();
+    public  void startGame()  {
+        //ConnectionWindow window = new ConnectionWindow();
+        //window.getConnectionWindow();
 
-        while (window.getSocket() == null) {}
-        socket = window.getSocket();
-
-        input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-
-
-        Properties text = new Properties();
-        text.setProperty("fontSize","15");
-        text.setProperty("font", "Courier");
-        frame = null;
-        try{
-            frame = new WSwingConsoleInterface("Boooom", text);
-        }
-        catch (ExceptionInInitializerError eiie) {
-            System.out.println("*** Error: Swing Console Box cannot be initialized. Exiting...");
-            eiie.printStackTrace();
-            System.exit(-1);
+        //while (window.getSocket() == null) {}
+        //socket = window.getSocket();
+        try {
+            socket = new Socket("127.0.0.1", 8901);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         greetengs();
-        options();
 
         prepareWindow();
+
         process();
     }
 
-    public  void process() throws IOException {
+    public  void process() {
         System.out.println("Игровой процесс начат");
         while(gameState) {
-            prepareWindow();
-            /*
             if (currentPlayer == selfId) {
                 turn();
             } else {
-                String sourse = input.readLine();
+                repaint("Please, wait for opponent turn");
+                String sourse = null;
+                try {
+                    sourse = in.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 System.out.println(sourse);
                 interpreter.interprete(sourse);
+                repaint("Please, wait for opponent turn");
             }
-            */
         }
     }
 
@@ -87,15 +77,133 @@ public class GameProcess {
     }
 
     public  void look() {
-
+        Player me = players.get(selfId);
+        repaint("Please, choose look direction");
+        panel.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if(e.getKeyChar() == 'w'){
+                    AnseverComposer.addLook("up");
+                    send(AnseverComposer.getAnswer());
+                    try {
+                        interpreter.interprete(in.readLine());
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if(e.getKeyChar() == 'a'){
+                    AnseverComposer.addLook("left");
+                    send(AnseverComposer.getAnswer());
+                    try {
+                        interpreter.interprete(in.readLine());
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if(e.getKeyChar() == 's'){
+                    AnseverComposer.addLook("down");
+                    send(AnseverComposer.getAnswer());
+                    try {
+                        interpreter.interprete(in.readLine());
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if(e.getKeyChar() == 'd'){
+                    AnseverComposer.addLook("right");
+                    send(AnseverComposer.getAnswer());
+                    try {
+                        interpreter.interprete(in.readLine());
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if(e.getKeyChar() == ' '){
+                    AnseverComposer.addLook("none");
+                    send(AnseverComposer.getAnswer());
+                }
+            }
+        });
+        repaint("Please, choose look direction");
     }
 
     public  void move() {
+        Player me = players.get(selfId);
+        repaint("Please, choose move direction");
+        panel.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if(e.getKeyChar() == 'w'){
+                    AnseverComposer.addMove("up");
+                    send(AnseverComposer.getAnswer());
+                    try {
+                        interpreter.interprete(in.readLine());
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if(e.getKeyChar() == 'a'){
+                    AnseverComposer.addMove("left");
+                    send(AnseverComposer.getAnswer());
+                    try {
+                        interpreter.interprete(in.readLine());
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if(e.getKeyChar() == 's'){
+                    AnseverComposer.addMove("down");
+                    send(AnseverComposer.getAnswer());
+                    try {
+                        interpreter.interprete(in.readLine());
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if(e.getKeyChar() == 'd'){
+                    AnseverComposer.addMove("left");
+                    send(AnseverComposer.getAnswer());
+                    try {
+                        interpreter.interprete(in.readLine());
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if(e.getKeyChar() == ' '){
 
+                }
+            }
+        });
+        repaint("Please, choose move direction");
     }
 
     public  void throwBomb() {
+        Player me = players.get(selfId);
+        repaint("Please, choose throwing bomb direction");
+        panel.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if(e.getKeyChar() == 'w'){
 
+                }
+                if(e.getKeyChar() == 'a'){
+
+                }
+                if(e.getKeyChar() == 's'){
+
+                }
+                if(e.getKeyChar() == 'd'){
+
+                }
+                if(e.getKeyChar() == ' '){
+
+                }
+            }
+        });
+        repaint("Please, choose throwing bomb direction");
     }
 
     public void changeSelectedEnemy() {
@@ -121,6 +229,10 @@ public class GameProcess {
     }
 
 
+    public void repaint(String state) {
+        panel.setState(state);
+        panel.setSelectedEnemyId(selectedEnemyId);
+    }
 
 
     //First options
@@ -131,37 +243,53 @@ public class GameProcess {
             selectedEnemyId = 1;
         }
 
-        frame.print(0, 0, "Your window", CSIColor.ALIZARIN);
-        frame.print(20, 0, "Enemy window", CSIColor.ALIZARIN);
+        JFrame frame = new JFrame();
+        frame.setTitle("Btooom!");
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setSize(800, 600);
+        frame.setResizable(false);
+        panel = new GamePanel();
+        frame.getContentPane().add(panel, "Center");
+        panel.gameRepaint();
+        frame.setVisible(true);
+        panel.setSelfId(selfId);
+        panel.setPlayers(players);
+        panel.setSelectedEnemyId(selectedEnemyId);
+        panel.setState("Starting...");
+        panel.gameRepaint();
 
-        Drawing.drawMap(players.get(selfId), frame, true);
-        Drawing.drawMap(players.get(selectedEnemyId), frame, false);
         System.out.println("Окно готово");
     }
 
-    private  void greetengs() throws IOException {
-        output.write(" ( greeting ) \n");
-        output.flush();
+    private  void greetengs() {
+        send(" ( greeting ) ");
         System.out.println("Отправляю приветствие!");
-        interpreter.interprete(input.readLine());
+        try {
+            interpreter.interprete(in.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.println("Получил ответное приветствие: мой АЙ ДИ:" + selfId);
-    }
 
-
-    private void options() throws IOException {
         String options = "";
         for (String keyword:
                 Language.getLanguage()) {
             options += (keyword + " ");
         }
-        output.write("( options "+ options +" )\n");
-        output.flush();
+        send("( options "+ options +" )");
         System.out.println("Отправлены опции");
-        String optionsSet = input.readLine();
-        interpreter.interprete(optionsSet);
-        System.out.println("Получены опции сервера: " + optionsSet);
+        try {
+            interpreter.interprete(in.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Получены опции сервера");
         //then, the number of players
-        interpreter.interprete(input.readLine());
+        try {
+            interpreter.interprete(in.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.println("Число игроков: " + players.size());
     }
 
@@ -172,5 +300,14 @@ public class GameProcess {
     }
     public  void setSelfId(int id) {
         selfId = id;
+    }
+
+    private void send(String message) {
+        try {
+            out.write(message + "\n");
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

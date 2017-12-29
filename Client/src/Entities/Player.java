@@ -72,7 +72,7 @@ public class Player {
             case unknown:
                 return "*";
             case indestructible:
-                return "H";
+                return "#";
             case destructible:
                 return "%";
             case destructed:

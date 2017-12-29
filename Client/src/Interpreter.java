@@ -25,7 +25,7 @@ public class Interpreter {
                 }
             }
             if(tokens[i].equals("rules")) {
-                System.out.println("rules keyword doesn't interpreted yet");
+                System.out.println("rules keyword");
             }
             if(tokens[i].equals("userscount")) {
                 process.fillPlayerList(Integer.parseInt(machine.pop()));
