@@ -1,3 +1,4 @@
+import ConnectionProcess.ConnectionWindow;
 import Entities.Language;
 import Entities.Player;
 import Graph.GamePanel;
@@ -5,6 +6,7 @@ import Graph.GamePanel;
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -30,13 +32,12 @@ public class GameProcess {
     }
 
     public  void startGame()  {
-        //ConnectionWindow window = new ConnectionWindow();
-        //window.getConnectionWindow();
+        ConnectionWindow window = new ConnectionWindow();
+        window.getConnectionWindow();
 
-        //while (window.getSocket() == null) {}
-        //socket = window.getSocket();
+        while (window.getSocket() == null) {}
+        socket = window.getSocket();
         try {
-            socket = new Socket("127.0.0.1", 8901);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         } catch (IOException e) {
